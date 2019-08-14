@@ -25,8 +25,10 @@ const BookType = new GraphQLObjectType({
         author: {
             type: AuthorType,
             resolve(parent, args){
+                //parent comes from the root field
                 console.log(parent);
-                return _.find(authors, {id:parent.authorId})
+                // return _.find(authors, {id:parent.authorId})
+                return AuthorModel.findById(parent.authorId);
             }
         }
     }),
@@ -42,6 +44,7 @@ const AuthorType = new GraphQLObjectType({
             type: new GraphQLList(BookType),
             resolve(parent, args){
                 // return _.filter(books, {authorId: parent.id})
+                return BookModel.find({authorId: parent.id});
             }
         }
     }),
@@ -50,34 +53,39 @@ const AuthorType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name : 'RootQueryType',
     fields : {
+        //original/parent query
         book: {
             type: BookType,
             args: {id: {type: GraphQLID}},
             resolve(parent, args){
-                // code to get data from db/other source
+                //original/parent query
                 // return _.find(books, {id : args.id});
-                
+                return BookModel.findById(args.id);
             
             }
         },
+        //original/parent query
         author: {
             type: AuthorType,
             args: {id: {type: GraphQLID}},
             resolve(parent, args){
                 // code to get data from db/other souce
                 // return _.find(authors, {id : args.id});
+                return AuthorModel.findById(args.id);
             }
         },
         books: {
             type: new GraphQLList(BookType),
             resolve(parent, args){
                 // return books;
+                return BookModel.find({});
             }
         },
         authors: {
             type: new GraphQLList(AuthorType),
             resolve(parent, args){
                 // return authors;
+                return AuthorModel.find({});
             }
         }
     }
