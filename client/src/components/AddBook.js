@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { BookQuery } from './BookList';
 //beware 
 
 function AddBook (){
@@ -44,7 +45,7 @@ function AddBook (){
             authorId
         }
         
-        addBook({variables : {name: state.name, genre: state.genre, authorId: state.authorId }}).then((data)=> console.log(data));
+        addBook({variables : {name: state.name, genre: state.genre, authorId: state.authorId }, refetchQueries: [{query: BookQuery}]}).then((data)=> console.log(data));
         
     }
     // inline binding in its finest!
