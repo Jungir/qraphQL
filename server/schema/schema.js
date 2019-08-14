@@ -4,7 +4,8 @@ const {
     GraphQLObjectType, 
     GraphQLString, 
     GraphQLSchema,
-    GraphQLID
+    GraphQLID,
+    GraphQLInt
 } = graphql;
 
 // dummy data
@@ -12,7 +13,12 @@ let books = [
     {name: 'Book1', genre: 'Fantasy', id: "1"},
     {name: 'Book2', genre: 'Fantasy', id: "2"},
     {name: 'Book3', genre: 'Sci-Fi', id: "3"}
-]
+];
+let authors = [
+    {name: 'patric 1', age: 44, id: "1"},
+    {name: 'patric 2', age: 42, id: "2"},
+    {name: 'patric 3', age: 66, id: "3"}
+];
 //schema file has 3 responsibilites:
 //1. To define types: Booktype
 //2. define relationships b-n types: Books <-> Authors
@@ -23,6 +29,15 @@ const BookType = new GraphQLObjectType({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
         genre: {type: GraphQLString}
+    }),
+});
+
+const AuthorType = new GraphQLObjectType({
+    name: 'Author',
+    fields : () => ({
+        id: {type: GraphQLID},
+        name: {type: GraphQLString},
+        age: {type: GraphQLInt}
     }),
 });
 
@@ -38,9 +53,17 @@ const RootQuery = new GraphQLObjectType({
                 
             
             }
+        },
+        author: {
+            type: AuthorType,
+            args: {id: {type: GraphQLID}},
+            resolve(parent, args){
+                // code to get data from db/other souce
+                return _.find(authors, {id : args.id});
+            }
         }
     }
-})
+});
 module.exports = new GraphQLSchema({
     query : RootQuery
 });
