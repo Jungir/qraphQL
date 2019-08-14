@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 //beware 
 
 function AddBook (){
@@ -12,7 +12,21 @@ function AddBook (){
             }
         }
     `);
+    const addBookMutation = gql`
+        mutation($name: String!, $genre: String!, $authorId: ID!){
+            addBook(name: $name, genre: $genre, authorId: $authorId){
+                name,
+                id
+            }
+        }
+        `;
 
+    const [addBook, newdata ] = useMutation(addBookMutation);
+    // addBook('HP', 'advanture', Math.random()).then(()=> console.log(newdata));
+    
+    const [name, setName] = useState("");
+    const [genre, setGenre] = useState("");
+    const [authorId, setAuthorId] = useState("");
     
     const displayAuthors = () => (
         loading ? 
@@ -21,24 +35,35 @@ function AddBook (){
             return <option key={author.id} value={author.id}>{author.name}</option>})
             )
     );
-  
     
+    const submitForm = (e) => {
+        e.preventDefault();
+        const state = {
+            name,
+            genre,
+            authorId
+        }
+        
+        addBook({variables : {name: state.name, genre: state.genre, authorId: state.authorId }}).then((data)=> console.log(data));
+        
+    }
+    // inline binding in its finest!
     return (
-        <form id="add-book">
+        <form id="add-book" onSubmit={submitForm }>
 
             <div className="field">
-            <label>Book name:</label>
-            <input type="text"/>
+            <label>Book name: {name}</label>
+            <input type="text" onChange={(e)=> setName(e.target.value)}/>
             </div>
 
             <div className="field">
-            <label>Genre:</label>
-            <input type="text"/>
+            <label>Genre: {genre}</label>
+            <input type="text" onChange={(e)=> setGenre(e.target.value)}/>
             </div>
 
             <div className="field">
-            <label>Author:</label>
-            <select>
+            <label>Author: {authorId}</label>
+            <select onChange={(e)=> setAuthorId(e.target.value)}>
                 <option>Select author</option>
                 {displayAuthors()}
             </select>

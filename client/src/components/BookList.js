@@ -12,7 +12,6 @@ function BookList (){
             }
         }
     `);
-
     if (loading) return <p>Getting the books...</p>;
     if (error) return <p>Could not fetch the data</p>;
     const displayBooks = ()=> (
