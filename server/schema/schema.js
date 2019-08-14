@@ -26,8 +26,8 @@ const BookType = new GraphQLObjectType({
         author: {
             type: AuthorType,
             resolve(parent, args){
-                //parent comes from the root field
-                console.log(parent);
+                //parent comes from the rootQuery field
+                console.log("inside book type" + parent);
                 // return _.find(authors, {id:parent.authorId})
                 return AuthorModel.findById(parent.authorId);
             }
@@ -44,7 +44,10 @@ const AuthorType = new GraphQLObjectType({
         books: {
             type: new GraphQLList(BookType),
             resolve(parent, args){
+                console.log('inside author type', parent);
+                
                 // return _.filter(books, {authorId: parent.id})
+                //parent.id or parent._id
                 return BookModel.find({authorId: parent.id});
             }
         }
