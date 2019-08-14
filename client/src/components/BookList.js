@@ -12,14 +12,23 @@ function BookList (){
             }
         }
     `);
-    console.log(data);
+
+    if (loading) return <p>Getting the books...</p>;
+    if (error) return <p>Could not fetch the data</p>;
+    const displayBooks = ()=> (
+        data.books.map(book => {
+            return <li key={book.id}>{book.name}</li>
+        })
+    );
+  
+    
     return (
         <div>
             <ul id="book-list">
-                <li>Book name</li>
+                {displayBooks()}
             </ul>
         </div>
-    )
+    );
     
-}
+};
 export default BookList;
