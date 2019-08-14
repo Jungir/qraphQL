@@ -1,20 +1,11 @@
 import React, {useState} from 'react';
-import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { AuthorQuery, BookQuery } from '../Queries/BookQueries';
+import { AuthorQuery, BookQuery, addBookMutation } from '../Queries/BookQueries';
 //beware 
 
 function AddBook (){
     const { loading, data } = useQuery(AuthorQuery);
-    const addBookMutation = gql`
-        mutation($name: String!, $genre: String!, $authorId: ID!){
-            addBook(name: $name, genre: $genre, authorId: $authorId){
-                name,
-                id
-            }
-        }
-        `;
-
+  
     const [addBook] = useMutation(addBookMutation);
     // addBook('HP', 'advanture', Math.random()).then(()=> console.log(newdata));
     
@@ -45,6 +36,7 @@ function AddBook (){
                     authorId: state.authorId 
                 }, 
                 refetchQueries: [{query: BookQuery}]
+                //data has been added successfully, flash-msg
             }).then((data)=> console.log(data)).catch((err)=>console.log(err));
         
     }

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { BookQuery } from '../Queries/BookQueries';
-//beware 
+import BookDetails from './BookDetails';
+
 
 function BookList (){
     
@@ -20,6 +21,7 @@ function BookList (){
             <ul id="book-list">
                 {displayBooks()}
             </ul>
+            <BookDetails/>
         </div>
     );
     
