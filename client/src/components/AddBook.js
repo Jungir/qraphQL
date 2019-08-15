@@ -37,7 +37,7 @@ function AddBook (){
                 }, 
                 refetchQueries: [{query: BookQuery}]
                 //data has been added successfully, flash-msg
-            }).then((data)=> console.log(data)).catch((err)=>console.log(err));
+            }).then().catch((err)=>console.log(err));
         
     }
     // inline binding in its finest!
@@ -45,18 +45,21 @@ function AddBook (){
         <form id="add-book" onSubmit={submitForm }>
 
             <div className="field">
-            <label>Book name: {name}</label>
+            <label>Book name:</label>
             <input type="text" onChange={(e)=> setName(e.target.value)}/>
             </div>
 
             <div className="field">
-            <label>Genre: {genre}</label>
+            <label>Genre:</label>
             <input type="text" onChange={(e)=> setGenre(e.target.value)}/>
             </div>
 
             <div className="field">
-            <label>Author: {authorId}</label>
-            <select onChange={(e)=> setAuthorId(e.target.value)}>
+            <label>Author:</label>
+            <select onChange={(e)=> {
+                e.stopPropagation()
+                setAuthorId(e.target.value)}
+            }>
                 <option>Select author</option>
                 {displayAuthors()}
             </select>
